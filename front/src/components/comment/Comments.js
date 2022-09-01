@@ -1,23 +1,48 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, Button, Form, Row, Col } from "react-bootstrap";
+import * as Api from "../../api";
 
 function Comments({portfolioOwnerId}) {
 
     const [comments, setComments] = useState([
-      {
-      userName: "서니",
-      comment: "방가방가",
-      user_id: "ddcc847a-4fc5-4d6a-b8df-f441232f21a0"
-    },
-      {
-        userName: "나",
-        comment: "왔다감",
-        user_id: 1  
-      }
+    //   {
+    //   userName: "서니",
+    //   comment: "방가방가",
+    //   user_id: "ddcc847a-4fc5-4d6a-b8df-f441232f21a0"
+    // },
+    //   {
+    //     userName: "나",
+    //     comment: "왔다감",
+    //     user_id: 1  
+    //   }
     ])
 
     const [userName, setUserName] = useState();
     const [message, setMessage] = useState();
+
+    useEffect(() => {
+      Api.get(`comment/list`, portfolioOwnerId).then((res) => setComments(res.data));
+    }, [portfolioOwnerId]);
+  
+
+    const handleSubmit = async (e) => {
+      e.preventDefault()
+      try{
+         await Api.post(`comment/add/${portfolioOwnerId}`, {
+          userName : userName,
+          comment : message
+        })
+        .then((res)=>{
+          
+          let data = res.data
+
+         })
+      } catch (e) {
+        console.log("실패");
+        
+      }
+
+    }
 
 
       return (
@@ -33,6 +58,7 @@ function Comments({portfolioOwnerId}) {
                 )
               })}
             <Form.Control
+              // onSubmit={handleSubmit}
               aria-label="Small"
               aria-describedby="inputGroup-sizing-sm"
               onChange={(e)=>{
@@ -41,15 +67,13 @@ function Comments({portfolioOwnerId}) {
         />
             <Button 
               variant="primary"
+              type="submit"
               onClick={(e)=>{
                 setComments([...comments, {
                   userName: userName,
                   comment: message
                 }])
-                // setMessage(portfolioOwnerId)
-                console.log(portfolioOwnerId)
                 const data = comments.findIndex(one => one.user_id === portfolioOwnerId)
-                console.log(data)
                 setUserName(comments[data].userName)
                 
              }}
