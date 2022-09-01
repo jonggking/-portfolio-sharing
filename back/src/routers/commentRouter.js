@@ -22,9 +22,10 @@ commentRouter.post(
       //writerId=사용자가 로그인할때 쓰는 그 id?
       const user_id = req.currentUserId;
 
-      const findUser = await userAuthService.getUserInfo({ user_id });
-      const userName = findUser.name;
+      // const findUser = await userAuthService.getUserInfo({ user_id });
+      // const userName = findUser.name;
       // req (request) 에서 데이터 가져오기: comment
+      const userName = req.body.userName;
       const comment = req.body.comment;
 
       // 위 데이터를 유저 db에 추가하기
