@@ -1,4 +1,4 @@
-import { Comment } from "../db/models/Comment";
+import { Comment } from '../db/models/Comment';
 
 class commentService {
   //postNewComment: 새로운 댓글 입력 받으면 --> DB에 추가하는 용도
@@ -14,7 +14,7 @@ class commentService {
     const pageAllComments = await Comment.findAll({ pageOwner });
 
     if (!pageAllComments) {
-      const errorMessage = "내용이 없습니다.";
+      const errorMessage = '내용이 없습니다.';
       return { errorMessage };
     }
     return pageAllComments;
@@ -25,12 +25,12 @@ class commentService {
 
     // db에서 찾지 못한 경우, 에러 메시지 반환
     if (!findOneComment) {
-      const errorMessage = "등록한 정보가 없습니다.";
+      const errorMessage = '등록한 정보가 없습니다.';
       return { findOneComment };
     }
 
     if (toUpdate.comment) {
-      const fieldToUpdate = "comment";
+      const fieldToUpdate = 'comment';
       const newValue = toUpdate.comment;
       commentEdit = await Comment.update({ user_id, fieldToUpdate, newValue });
     }
