@@ -1,10 +1,16 @@
 import { useNavigate } from "react-router-dom";
 import { Card, Row, Button, Col } from "react-bootstrap";
+import * as Api from "../../api";
 
-function UserCard({ user, setIsEditing, isEditable, isNetwork }) {
+function UserCard({ user, setIsEditing, isEditable, isNetwork, profileImg}) {
   const navigate = useNavigate();
+  
+  
+  
+  
+  
   return (
-    <Card className="mb-5 ms-3 mr-5" style={{ width: "18rem" }}>
+    <Card className="mb-2 ms-3 mr-5" style={{ width: "18rem" }}>
       <Card.Body>
         <Row className="justify-content-md-center">
           <Card.Img

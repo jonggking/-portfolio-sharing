@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Container, Col, Row, Form, Button } from "react-bootstrap";
-
+import axios from "axios";
 import * as Api from "../../api";
 
 function RegisterForm() {
@@ -46,11 +46,21 @@ function RegisterForm() {
 
     try {
       // "user/register" 엔드포인트로 post요청함.
-      await Api.post("user/register", {
+      const res = await Api.post("user/register", {
         email,
         password,
         name,
       });
+      const userId = res.data.id
+      const formData = new FormData()
+      formData.append('uploadImage', )
+  
+      const config = {
+        Headers: {
+          'content-type': 'multipart/form-data',
+        },
+      };
+      axios.post(`${userId}`, formData, config);
 
       // 로그인 페이지로 이동함.
       navigate("/login");

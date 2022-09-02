@@ -1,8 +1,13 @@
+import axios from "axios";
 import React, { useState } from "react";
 import { Button, Form, Card, Col, Row } from "react-bootstrap";
 import * as Api from "../../api";
 
-function UserEditForm({ user, setIsEditing, setUser }) {
+function UserEditForm({ user, setIsEditing, setUser, profileImg, setProfileImg }) {
+  
+  
+  const [logoLoding, setLogoLoding] = useState();
+
   //useState로 name 상태를 생성함.
   const [name, setName] = useState(user.name);
   //useState로 email 상태를 생성함.
@@ -10,6 +15,14 @@ function UserEditForm({ user, setIsEditing, setUser }) {
   //useState로 description 상태를 생성함.
   const [description, setDescription] = useState(user.description);
 
+  // 필수값 입력 확인
+  const isNameValid = name.length > 0;
+  const isEmailValid = email.length > 0;
+  const isDescriptionValid = description.length > 0;
+
+  //필수값 조건 동시에 만족되는지 확인
+  const isFormValid = isNameValid && isEmailValid && isDescriptionValid;
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -19,6 +32,7 @@ function UserEditForm({ user, setIsEditing, setUser }) {
       email,
       description,
     });
+
     // 유저 정보는 response의 data임.
     const updatedUser = res.data;
     // 해당 유저 정보로 user을 세팅함.
@@ -26,20 +40,49 @@ function UserEditForm({ user, setIsEditing, setUser }) {
 
     // isEditing을 false로 세팅함.
     setIsEditing(false);
-  };
+    console.log(profileImg)
 
-      // 필수값 입력 확인
-      const isNameValid = name.length > 0;
-      const isEmailValid = email.length > 0;
-      const isDescriptionValid = description.length > 0;
-  
-      //필수값 조건 동시에 만족되는지 확인
-      const isFormValid = isNameValid && isEmailValid && isDescriptionValid;
+    
+    // 유저 사진정보 PUT 요청
+    // const res = await Api.put(''), {
+    //   profileImg
+    // }
+    
+    const formData = new FormData()
+    formData.append('uploadImage', profileImg[0])
+
+    const config = {
+      Headers: {
+        'content-type': 'multipart/form-data',
+      },
+    };
+
+    axios.post('', formData, config);
+  }
+
+
+    // onImgChange = async (event: any) =>{
+    //   setLogoLoding(true)
+    //   const formData = new FormData()
+    //   formData.append('file', event.target.files[0])
+    //   const response = await apiClient.post('', formData);
+    //   setLogoLoding(false)
+    // }
+
+
 
   return (
     <Card className="mb-2">
       <Card.Body>
         <Form onSubmit={handleSubmit}>
+          <Form.Group controlId="formFile" className="mb-3">
+            <Form.Label>프로필 사진 선택</Form.Label>
+            <Form.Control 
+                type="file"
+                key="profileFile"
+                accept='image/*'
+                onChange={(e)=>setProfileImg(e.target.files)} />
+          </Form.Group>
           <Form.Group controlId="useEditName" className="mb-3">
             <Form.Control
               type="text"
@@ -48,8 +91,7 @@ function UserEditForm({ user, setIsEditing, setUser }) {
               onChange={(e) => setName(e.target.value)}
             />
             {!isNameValid && (
-                <Form.Text 
-                style={{color: 'tomato', fontWeight: 'bolder' }}>
+                <Form.Text className="text-success">
                   수정사항을 입력해주세요.
             </Form.Text>)}
           </Form.Group>
@@ -62,8 +104,7 @@ function UserEditForm({ user, setIsEditing, setUser }) {
               onChange={(e) => setEmail(e.target.value)}
             />
             {!isEmailValid && (
-                <Form.Text 
-                style={{color: 'tomato', fontWeight: 'bolder' }}>
+                <Form.Text className="text-success">
                   수정사항을 입력해주세요.
             </Form.Text>)}
           </Form.Group>
@@ -76,8 +117,7 @@ function UserEditForm({ user, setIsEditing, setUser }) {
               onChange={(e) => setDescription(e.target.value)}
             />
             {!isDescriptionValid && (
-                <Form.Text 
-                style={{color: 'tomato', fontWeight: 'bolder' }}>
+                <Form.Text className="text-success">
                   수정사항을 입력해주세요.
             </Form.Text>)}
           </Form.Group>
