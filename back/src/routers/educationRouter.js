@@ -1,18 +1,18 @@
-import is from "@sindresorhus/is";
-import { Router } from "express";
-import { EducationModel } from "../db/schemas/education";
-import { login_required } from "../middlewares/login_required";
-import { educationService } from "../services/educationService";
+import is from '@sindresorhus/is';
+import { Router } from 'express';
+import { EducationModel } from '../db/schemas/education';
+import { login_required } from '../middlewares/login_required';
+import { educationService } from '../services/educationService';
 
 const educationRouter = Router();
 
 // 학업정보 등록 education/add로 들어왔을때
-educationRouter.post("/add", login_required, async function (req, res, next) {
+educationRouter.post('/add', login_required, async function (req, res, next) {
   try {
     if (is.emptyObject(req.body)) {
-      throw new Error("정보를 입력해 주세요");
+      throw new Error('정보를 입력해 주세요');
     }
-    //user_id=사용자가 로그인할때 쓰는 그 id?
+    //user_id=사용자가 로그인할때 부여되는 고유값
     const user_id = req.currentUserId;
     // req (request) 에서 데이터 가져오기: school,major,degree
     const school = req.body.school;
@@ -36,9 +36,9 @@ educationRouter.post("/add", login_required, async function (req, res, next) {
     next(error);
   }
 });
-//유저의 모든 학력 정보를 가지고 올때.
+//유저의 모든 학력 정보를 가지고 올때
 educationRouter.get(
-  "/info/:userId",
+  '/info/:userId',
   login_required,
   async function (req, res, next) {
     try {
@@ -55,7 +55,7 @@ educationRouter.get(
   }
 );
 //유저가 한가지 학력 정보를 수정하려고 할때(한개의 학력정보 고유값을 eduId라고 지칭)
-educationRouter.put("/:eduId", login_required, async function (req, res, next) {
+educationRouter.put('/:eduId', login_required, async function (req, res, next) {
   try {
     // URI로부터 사용자 id를 추출함.
     const edu_id = req.params.eduId;
@@ -82,7 +82,7 @@ educationRouter.put("/:eduId", login_required, async function (req, res, next) {
 });
 
 educationRouter.delete(
-  "/:eduId",
+  '/:eduId',
   login_required,
   async function (req, res, next) {
     try {
@@ -102,14 +102,5 @@ educationRouter.delete(
     }
   }
 );
-
-// jwt 토큰 기능 확인용, 삭제해도 되는 라우터임.
-educationRouter.get("/afterlogin", login_required, function (req, res, next) {
-  res
-    .status(200)
-    .send(
-      `안녕하세요 ${req.currentUserId}님, jwt 웹 토큰 기능 정상 작동 중입니다.`
-    );
-});
 
 export { educationRouter };
