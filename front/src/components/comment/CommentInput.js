@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { Form, Button, Col, Row, Card } from "react-bootstrap";
 import * as Api from "../../api";
 
+import "./../../styles.css";
+
 function CommentForm({commentList, setCommentList, myId, portfolioOwnerId, myName }) {
   
   const [comment, setComment] = useState("");
@@ -30,9 +32,9 @@ function CommentForm({commentList, setCommentList, myId, portfolioOwnerId, myNam
 
   return (
     <Card.Body>
-      <div className="form-inline mb-2">
-        <label for="replyId">
-          {myName}
+      <div className="form-inline mb-2" >
+        <label style={{ fontWeight: 'bolder' }}>
+           {myName}
         </label>
       </div>
       <textarea
